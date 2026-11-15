@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ORBIT - Futuristic Personal Command Center & Productivity Operating System">
+  <meta name="theme-color" content="#030712">
+  <title>ORBIT // Personal Command Center</title>
+
+  <!-- Typography: Futuristic Google Fonts with system fallbacks -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="dark" data-accent="cyan">
+
+  <!-- SYSTEM BOOT SEQUENCE OVERLAY -->
+  <div id="boot-overlay" class="boot-overlay">
+    <div class="boot-content">
+      <div class="boot-logo-wrapper">
+        <div class="boot-rings">
+          <div class="boot-ring ring-1"></div>
+          <div class="boot-ring ring-2"></div>
+          <div class="boot-ring ring-3"></div>
+          <div class="boot-core">
+            <svg class="boot-icon" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="2" stroke-dasharray="4 2"/>
+              <circle cx="24" cy="24" r="10" stroke="currentColor" stroke-width="2.5"/>
+              <circle cx="24" cy="24" r="3" fill="currentColor"/>
+              <path d="M4 24h6M38 24h6M24 4v6M24 38v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="boot-title">ORBIT // OS</div>
+      <div class="boot-subtitle">NEURAL COMMAND PROTOCOL v3.4.8</div>
+      <div class="boot-progress-bar">
+        <div class="boot-progress-fill" id="boot-progress-fill"></div>
+      </div>
+      <div class="boot-status" id="boot-status">INITIALIZING CORE MODULES...</div>
+    </div>
+  </div>
+
+  <!-- AMBIENT CANVAS & BACKGROUND EFFECTS -->
+  <canvas id="ambient-canvas" class="ambient-canvas"></canvas>
+  <div class="cyber-grid-overlay"></div>
+  <div class="cyber-scanline"></div>
+  <div class="cyber-glow-orb orb-1"></div>
+  <div class="cyber-glow-orb orb-2"></div>
+  <div class="cyber-glow-orb orb-3"></div>
+
+  <!-- APPLICATION WRAPPER -->
+  <div class="app-container" id="app-container">
+
+    <!-- FLOATING COLLAPSIBLE SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-container">
+          <div class="brand-logo-glow">
+            <svg class="brand-icon" viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="13" stroke="currentColor" stroke-width="2" stroke-dasharray="8 4"/>
+              <ellipse cx="16" cy="16" rx="14" ry="6" stroke="currentColor" stroke-width="1.5" transform="rotate(-25 16 16)"/>
+              <circle cx="16" cy="16" r="4" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">ORBIT</span>
+            <span class="brand-tag">COMMAND OS</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle-btn" id="sidebar-collapse-btn" title="Toggle Sidebar Collapse (Ctrl + B)" aria-label="Toggle Sidebar">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="11 17 6 12 11 7"></polyline>
+            <polyline points="18 17 13 12 18 7"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <div class="nav-section-label">MAIN SYSTEMS</div>
+
+        <button class="nav-item active" data-section="command-center" id="nav-command-center">
+          <span class="nav-indicator"></span>
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="9" rx="1"/>
+              <rect x="14" y="3" width="7" height="5" rx="1"/>
+              <rect x="14" y="12" width="7" height="9" rx="1"/>
+              <rect x="3" y="16" width="7" height="5" rx="1"/>
+            </svg>
+          </span>
+          <span class="nav-label">Command Center</span>
+          <span class="nav-badge live-badge">LIVE</span>
+        </button>
+
+        <button class="nav-item" data-section="task-manager" id="nav-task-manager">
+          <span class="nav-indicator"></span>
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4"/>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+          </span>
+          <span class="nav-label">Task Manager</span>
+          <span class="nav-badge" id="sidebar-task-badge">0</span>
+        </button>
+
+        <button class="nav-item" data-section="notes" id="nav-notes">
+          <span class="nav-indicator"></span>
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+          </span>
+          <span class="nav-label">Notes Vault</span>
+          <span class="nav-badge" id="sidebar-notes-badge">0</span>
+        </button>
+
+        <button class="nav-item" data-section="expense-tracker" id="nav-expense-tracker">
+          <span class="nav-indicator"></span>
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="1" x2="12" y2="23"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </span>
+          <span class="nav-label">Expense Tracker</span>
+          <span class="nav-badge" id="sidebar-expense-badge">$0</span>
+        </button>
+
+        <div class="nav-section-label">OPERATIONS</div>
+
+        <button class="nav-item" data-section="focus-mode" id="nav-focus-mode">
+          <span class="nav-indicator"></span>
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </span>
+          <span class="nav-label">Focus Mode</span>
+          <span class="nav-status-dot pulse" id="focus-nav-dot"></span>
+        </button>
+
+        <button class="nav-item" data-section="calendar" id="nav-calendar">
+          <span class="nav-indicator"></span>
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </span>
+          <span class="nav-label">Calendar</span>
+          <span class="nav-badge" id="sidebar-calendar-badge">0</span>
+        </button>
+
+        <button class="nav-item" data-section="calculator" id="nav-calculator">
+          <span class="nav-indicator"></span>
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="4" y="2" width="16" height="20" rx="2"/>
+              <line x1="8" y1="6" x2="16" y2="6"/>
+              <line x1="16" y1="14" x2="16" y2="18"/>
+              <path d="M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M8 18h.01M12 18h.01"/>
+            </svg>
+          </span>
+          <span class="nav-label">Calculator</span>
+        </button>
+
+        <button class="nav-item" data-section="settings" id="nav-settings">
+          <span class="nav-indicator"></span>
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </span>
+          <span class="nav-label">Settings</span>
+        </button>
+      </nav>
+
+      <!-- Sidebar Footer Diagnostics -->
+      <div class="sidebar-footer">
+        <div class="system-status-card">
+          <div class="status-indicator-row">
+            <span class="status-pulse-dot"></span>
+            <span class="status-text">SYS ONLINE</span>
+            <span class="system-version">v3.4</span>
+          </div>
+          <div class="status-meter">
+            <div class="meter-bar" style="width: 88%;"></div>
+          </div>
+          <div class="status-meta">
+            <span>MEM: OPTIMAL</span>
+            <span id="sidebar-clock-mini">00:00</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN INTERFACE VIEWPORT -->
+    <div class="main-viewport">
+
+      <!-- TOP COMMAND BAR -->
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open Navigation">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          
+          <div class="command-search-trigger" id="cmd-palette-trigger" title="Open Command Palette (Ctrl + K)">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span class="search-placeholder">Execute Command or Search...</span>
+            <span class="cmd-shortcut-tag"><kbd>Ctrl</kbd> + <kbd>K</kbd></span>
+          </div>
+        </div>
+
+        <div class="top-bar-center">
+          <div class="telemetry-pill">
+            <div class="clock-display" id="top-clock">
+              <span class="time-digit" id="clock-hours">00</span>
+              <span class="time-colon">:</span>
+              <span class="time-digit" id="clock-minutes">00</span>
+              <span class="time-colon">:</span>
+              <span class="time-digit" id="clock-seconds">00</span>
+              <span class="time-ampm" id="clock-ampm">AM</span>
+            </div>
+            <div class="date-display" id="top-date">STARDATE 2026.11</div>
+          </div>
+        </div>
+
+        <div class="top-bar-right">
+          <!-- Audio Synthesizer Toggle -->
+          <button class="action-icon-btn" id="sound-toggle-btn" title="Toggle Futuristic Audio FX" aria-label="Audio FX">
+            <svg id="sound-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <svg id="sound-icon-off" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          </button>
+
+          <!-- Shortcuts Dialog Trigger -->
+          <button class="action-icon-btn" id="shortcuts-modal-btn" title="Keyboard Shortcuts (?)" aria-label="Shortcuts">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </button>
+
+          <!-- Fullscreen Toggle -->
+          <button class="action-icon-btn" id="fullscreen-btn" title="Toggle Fullscreen" aria-label="Fullscreen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+            </svg>
+          </button>
+
+          <!-- User Commander Avatar Pill -->
+          <div class="user-profile-badge" id="user-badge" title="Commander Profile">
+            <div class="avatar-ring">
+              <div class="avatar-core">SP</div>
+            </div>
+            <div class="user-meta">
+              <span class="user-title" id="top-user-title">COMMANDER</span>
+              <span class="user-name" id="top-user-name">Subhranil</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- SCROLLABLE SECTIONS CONTAINER -->
+      <main class="content-viewport" id="content-viewport">
+
+        <!-- ==============================================
+             SECTION 1: COMMAND CENTER (DASHBOARD)
+             ============================================== -->
+        <section class="app-section active" id="section-command-center">
+          <!-- Hero Banner -->
+          <div class="dashboard-hero-card">
+            <div class="hero-left">
+              <div class="hero-status-tag">
+                <span class="status-pulse-dot"></span>
+                <span>COMMAND PROTOCOL ACTIVE // LEVEL 1 AUTHORIZATION</span>
+              </div>
+              <h1 class="hero-greeting" id="hero-greeting">Good Morning, Commander.</h1>
+              <p class="hero-subtext">All orbital systems operational. You have <strong id="hero-pending-count">0 pending tasks</strong> and <strong id="hero-event-count">0 events</strong> scheduled today.</p>
+              
+              <div class="quick-action-strip">
+                <button class="btn btn-primary" id="dash-quick-task-btn">
+                  <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  New Task
+                </button>
+                <button class="btn btn-secondary" id="dash-quick-note-btn">
+                  <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  Quick Note
+                </button>
+                <button class="btn btn-secondary" id="dash-quick-expense-btn">
+                  <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  Log Expense
+                </button>
+                <button class="btn btn-accent" id="dash-quick-focus-btn">
+                  <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                  Launch Focus (25m)
+                </button>
+              </div>
+            </div>
+
+            <!-- Productivity Radial Gauge Card -->
+            <div class="hero-right">
+              <div class="productivity-gauge-container">
+                <div class="gauge-ring-box">
+                  <svg class="gauge-svg" viewBox="0 0 120 120">
+                    <circle class="gauge-bg" cx="60" cy="60" r="50"></circle>
+                    <circle class="gauge-progress" id="dash-productivity-ring" cx="60" cy="60" r="50" stroke-dasharray="314.15" stroke-dashoffset="314.15"></circle>
+                  </svg>
+                  <div class="gauge-content">
+                    <span class="gauge-percentage" id="dash-productivity-pct">0%</span>
+                    <span class="gauge-label">PRODUCTIVITY</span>
+                  </div>
+                </div>
+                <div class="gauge-meta-list">
+                  <div class="gauge-meta-item">
+                    <span class="meta-dot cyan"></span>
+                    <span class="meta-name">Tasks Done:</span>
+                    <span class="meta-val" id="dash-tasks-done-ratio">0/0</span>
+                  </div>
+                  <div class="gauge-meta-item">
+                    <span class="meta-dot purple"></span>
+                    <span class="meta-name">Focus Time:</span>
+                    <span class="meta-val" id="dash-focus-time-val">0m</span>
+                  </div>
+                  <div class="gauge-meta-item">
+                    <span class="meta-dot green"></span>
+                    <span class="meta-name">Balance:</span>
+                    <span class="meta-val" id="dash-balance-preview">$0.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 Stat Counters Grid -->
+          <div class="stat-cards-grid">
+            <div class="cyber-stat-card cyan-glow">
+              <div class="stat-card-header">
+                <span class="stat-title">TOTAL TASKS</span>
+                <span class="stat-icon-wrapper cyan">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                </span>
+              </div>
+              <div class="stat-main-row">
+                <span class="stat-number" id="dash-stat-total-tasks">0</span>
+                <span class="stat-trend neutral">All Registered</span>
+              </div>
+              <div class="stat-progress-line">
+                <div class="progress-fill cyan-fill" id="dash-progress-tasks" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="cyber-stat-card green-glow">
+              <div class="stat-card-header">
+                <span class="stat-title">COMPLETED TASKS</span>
+                <span class="stat-icon-wrapper green">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                </span>
+              </div>
+              <div class="stat-main-row">
+                <span class="stat-number" id="dash-stat-completed-tasks">0</span>
+                <span class="stat-trend positive" id="dash-stat-completed-pct">0% Rate</span>
+              </div>
+              <div class="stat-progress-line">
+                <div class="progress-fill green-fill" id="dash-progress-completed" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="cyber-stat-card amber-glow">
+              <div class="stat-card-header">
+                <span class="stat-title">PENDING DIRECTIVES</span>
+                <span class="stat-icon-wrapper amber">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+                </span>
+              </div>
+              <div class="stat-main-row">
+                <span class="stat-number" id="dash-stat-pending-tasks">0</span>
+                <span class="stat-trend alert" id="dash-stat-pending-alert">Action Needed</span>
+              </div>
+              <div class="stat-progress-line">
+                <div class="progress-fill amber-fill" id="dash-progress-pending" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="cyber-stat-card purple-glow">
+              <div class="stat-card-header">
+                <span class="stat-title">NET ASSET BALANCE</span>
+                <span class="stat-icon-wrapper purple">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </span>
+              </div>
+              <div class="stat-main-row">
+                <span class="stat-number" id="dash-stat-balance">$0.00</span>
+                <span class="stat-trend positive" id="dash-stat-savings-rate">0% Savings</span>
+              </div>
+              <div class="stat-progress-line">
+                <div class="progress-fill purple-fill" id="dash-progress-balance" style="width: 65%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dashboard Content 2x2 Grid -->
+          <div class="dashboard-grid-2x2">
+            
+            <!-- Card 1: Today's High Priority Tasks -->
+            <div class="glass-card">
+              <div class="card-header-row">
+                <div class="card-title-group">
+                  <span class="card-dot-indicator cyan"></span>
+                  <h3 class="card-title">Priority Directives</h3>
+                </div>
+                <button class="card-action-link" id="dash-view-tasks-link">View All Tasks &rarr;</button>
+              </div>
+              <div class="card-body">
+                <div class="dash-list-container" id="dash-priority-tasks-list">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Recent Notes Vault -->
+            <div class="glass-card">
+              <div class="card-header-row">
+                <div class="card-title-group">
+                  <span class="card-dot-indicator purple"></span>
+                  <h3 class="card-title">Recent Neural Notes</h3>
+                </div>
+                <button class="card-action-link" id="dash-view-notes-link">Open Vault &rarr;</button>
+              </div>
+              <div class="card-body">
+                <div class="dash-notes-preview-grid" id="dash-recent-notes-list">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Upcoming Calendar Schedule -->
+            <div class="glass-card">
+              <div class="card-header-row">
+                <div class="card-title-group">
+                  <span class="card-dot-indicator green"></span>
+                  <h3 class="card-title">Chronos Mission Schedule</h3>
+                </div>
+                <button class="card-action-link" id="dash-view-calendar-link">Full Calendar &rarr;</button>
+              </div>
+              <div class="card-body">
+                <div class="dash-list-container" id="dash-upcoming-events-list">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4: Financial Velocity & Expense Breakdown -->
+            <div class="glass-card">
+              <div class="card-header-row">
+                <div class="card-title-group">
+                  <span class="card-dot-indicator amber"></span>
+                  <h3 class="card-title">Financial Velocity</h3>
+                </div>
+                <button class="card-action-link" id="dash-view-expense-link">Finance Hub &rarr;</button>
+              </div>
+              <div class="card-body">
+                <div class="finance-mini-summary">
+                  <div class="finance-metric-pill income">
+                    <span class="metric-label">Total Inflow</span>
+                    <span class="metric-value" id="dash-total-income">$0.00</span>
+                  </div>
+                  <div class="finance-metric-pill expense">
+                    <span class="metric-label">Total Outflow</span>
+                    <span class="metric-value" id="dash-total-expense">$0.00</span>
+                  </div>
+                  <div class="finance-metric-pill net">
+                    <span class="metric-label">Net Reserve</span>
+                    <span class="metric-value" id="dash-net-reserve">$0.00</span>
+                  </div>
+                </div>
+                <div class="dash-chart-container">
+                  <canvas id="dash-mini-finance-chart" width="300" height="110"></canvas>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SECTION 2: TASK MANAGER
+             ============================================== -->
+        <section class="app-section" id="section-task-manager">
+          <div class="section-header-banner">
+            <div class="section-header-info">
+              <h2 class="section-title">TASK MANAGEMENT MATRIX</h2>
+              <p class="section-subtitle">Organize, prioritize, and execute operational directives.</p>
+            </div>
+            <div class="section-header-actions">
+              <button class="btn btn-primary" id="open-task-modal-btn">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Add Directive
+              </button>
+            </div>
+          </div>
+
+          <!-- Task Filter & Search Bar -->
+          <div class="filter-search-toolbar glass-card">
+            <div class="search-input-box">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="task-search-input" placeholder="Search tasks by keyword or tag..." aria-label="Search tasks">
+              <button class="clear-input-btn hidden" id="task-search-clear">&times;</button>
+            </div>
+
+            <div class="filter-tab-pills">
+              <button class="filter-pill active" data-filter="all">All (<span id="task-count-all">0</span>)</button>
+              <button class="filter-pill" data-filter="pending">Pending (<span id="task-count-pending">0</span>)</button>
+              <button class="filter-pill" data-filter="completed">Completed (<span id="task-count-completed">0</span>)</button>
+              <button class="filter-pill" data-filter="high">High Priority</button>
+              <button class="filter-pill" data-filter="medium">Medium</button>
+              <button class="filter-pill" data-filter="low">Low</button>
+            </div>
+          </div>
+
+          <!-- Task Lists Split: Pending and Completed -->
+          <div class="tasks-layout-split">
+            <!-- Pending Directives Column -->
+            <div class="task-column">
+              <div class="task-column-header">
+                <div class="col-title-badge">
+                  <span class="status-pulse-dot amber"></span>
+                  <span>ACTIVE DIRECTIVES</span>
+                  <span class="count-pill" id="pending-column-count">0</span>
+                </div>
+              </div>
+              <div class="task-items-list" id="pending-tasks-container">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+
+            <!-- Completed Directives Column -->
+            <div class="task-column">
+              <div class="task-column-header">
+                <div class="col-title-badge">
+                  <span class="status-pulse-dot green"></span>
+                  <span>COMPLETED ARCHIVE</span>
+                  <span class="count-pill" id="completed-column-count">0</span>
+                </div>
+                <button class="btn btn-xs btn-outline-danger" id="clear-completed-tasks-btn" title="Clear all completed tasks">Clear Completed</button>
+              </div>
+              <div class="task-items-list" id="completed-tasks-container">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SECTION 3: NOTES APPLICATION
+             ============================================== -->
+        <section class="app-section" id="section-notes">
+          <div class="section-header-banner">
+            <div class="section-header-info">
+              <h2 class="section-title">NEURAL NOTES VAULT</h2>
+              <p class="section-subtitle">Capture mission intelligence, research logs, and tactical thoughts.</p>
+            </div>
+            <div class="section-header-actions">
+              <button class="btn btn-primary" id="open-note-modal-btn">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Create Note
+              </button>
+            </div>
+          </div>
+
+          <!-- Notes Filter & Search Toolbar -->
+          <div class="filter-search-toolbar glass-card">
+            <div class="search-input-box">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="note-search-input" placeholder="Search notes by title or content..." aria-label="Search notes">
+              <button class="clear-input-btn hidden" id="note-search-clear">&times;</button>
+            </div>
+
+            <div class="filter-tab-pills" id="note-category-filters">
+              <button class="filter-pill active" data-note-cat="all">All Notes</button>
+              <button class="filter-pill" data-note-cat="General">General</button>
+              <button class="filter-pill" data-note-cat="Work">Work</button>
+              <button class="filter-pill" data-note-cat="Ideas">Ideas</button>
+              <button class="filter-pill" data-note-cat="Research">Research</button>
+              <button class="filter-pill" data-note-cat="Tactical">Tactical</button>
+            </div>
+          </div>
+
+          <!-- Notes Grid View -->
+          <div class="notes-masonry-grid" id="notes-grid-container">
+            <!-- Injected via JavaScript -->
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SECTION 4: EXPENSE TRACKER
+             ============================================== -->
+        <section class="app-section" id="section-expense-tracker">
+          <div class="section-header-banner">
+            <div class="section-header-info">
+              <h2 class="section-title">FINANCIAL TELEMETRY & EXPENSE TRACKER</h2>
+              <p class="section-subtitle">Real-time asset accounting, cash-flow monitoring, and expense analysis.</p>
+            </div>
+            <div class="section-header-actions">
+              <button class="btn btn-primary" id="open-expense-modal-btn">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Log Transaction
+              </button>
+            </div>
+          </div>
+
+          <!-- 3 Main Asset Cards -->
+          <div class="stat-cards-grid expense-summary-grid">
+            <div class="cyber-stat-card green-glow">
+              <div class="stat-card-header">
+                <span class="stat-title">TOTAL INCOME</span>
+                <span class="stat-icon-wrapper green">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                </span>
+              </div>
+              <div class="stat-main-row">
+                <span class="stat-number text-green" id="expense-total-income">$0.00</span>
+                <span class="stat-trend positive">Credit Inflow</span>
+              </div>
+            </div>
+
+            <div class="cyber-stat-card amber-glow">
+              <div class="stat-card-header">
+                <span class="stat-title">TOTAL EXPENSES</span>
+                <span class="stat-icon-wrapper amber">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                </span>
+              </div>
+              <div class="stat-main-row">
+                <span class="stat-number text-magenta" id="expense-total-outflow">$0.00</span>
+                <span class="stat-trend alert">Debit Outflow</span>
+              </div>
+            </div>
+
+            <div class="cyber-stat-card cyan-glow">
+              <div class="stat-card-header">
+                <span class="stat-title">NET AVAILABLE BALANCE</span>
+                <span class="stat-icon-wrapper cyan">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M8 10h8"/></svg>
+                </span>
+              </div>
+              <div class="stat-main-row">
+                <span class="stat-number text-cyan" id="expense-net-balance">$0.00</span>
+                <span class="stat-trend positive" id="expense-burn-rate">Liquid Assets</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Expense Charts & Breakdown Row -->
+          <div class="expense-analytics-row">
+            <!-- Category Distribution Donut Chart -->
+            <div class="glass-card expense-chart-card">
+              <div class="card-header-row">
+                <div class="card-title-group">
+                  <span class="card-dot-indicator cyan"></span>
+                  <h3 class="card-title">Expense Distribution by Category</h3>
+                </div>
+              </div>
+              <div class="expense-chart-body">
+                <div class="donut-chart-wrapper">
+                  <canvas id="expense-donut-chart" width="220" height="220"></canvas>
+                </div>
+                <div class="expense-legend-container" id="expense-chart-legend">
+                  <!-- Legend items injected dynamically -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Cash Flow Ratio Bar Chart -->
+            <div class="glass-card expense-chart-card">
+              <div class="card-header-row">
+                <div class="card-title-group">
+                  <span class="card-dot-indicator purple"></span>
+                  <h3 class="card-title">Inflow vs Outflow Ratio</h3>
+                </div>
+              </div>
+              <div class="expense-chart-body">
+                <div class="cashflow-bar-container">
+                  <canvas id="expense-bar-chart" width="280" height="200"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transaction Ledger Table -->
+          <div class="glass-card">
+            <div class="card-header-row">
+              <div class="card-title-group">
+                <span class="card-dot-indicator green"></span>
+                <h3 class="card-title">Transaction Ledger</h3>
+              </div>
+              <div class="ledger-actions-group">
+                <select id="expense-filter-category" class="cyber-select" aria-label="Filter by Category">
+                  <option value="all">All Categories</option>
+                  <option value="Salary">Salary</option>
+                  <option value="Freelance">Freelance</option>
+                  <option value="Investments">Investments</option>
+                  <option value="Food & Dining">Food & Dining</option>
+                  <option value="Housing & Utilities">Housing & Utilities</option>
+                  <option value="Tech & Hardware">Tech & Hardware</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Health">Health</option>
+                  <option value="Other">Other</option>
+                </select>
+                <select id="expense-filter-type" class="cyber-select" aria-label="Filter by Type">
+                  <option value="all">All Types</option>
+                  <option value="income">Income Only</option>
+                  <option value="expense">Expense Only</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="cyber-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="expense-transactions-tbody">
+                  <!-- Transactions injected via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SECTION 5: FOCUS MODE (POMODORO)
+             ============================================== -->
+        <section class="app-section" id="section-focus-mode">
+          <div class="section-header-banner">
+            <div class="section-header-info">
+              <h2 class="section-title">CHRONOS FOCUS ENGINE</h2>
+              <p class="section-subtitle">Deep work acceleration through quantum pomodoro sessions.</p>
+            </div>
+          </div>
+
+          <div class="focus-layout-container">
+            <!-- Main Pomodoro Dial Card -->
+            <div class="glass-card focus-dial-card">
+              <!-- Mode Tabs -->
+              <div class="focus-mode-tabs">
+                <button class="focus-tab active" data-focus-mode="work" id="focus-tab-work">
+                  <span class="tab-indicator"></span>
+                  Focus Session (25m)
+                </button>
+                <button class="focus-tab" data-focus-mode="short" id="focus-tab-short">
+                  <span class="tab-indicator"></span>
+                  Short Break (5m)
+                </button>
+                <button class="focus-tab" data-focus-mode="long" id="focus-tab-long">
+                  <span class="tab-indicator"></span>
+                  Long Break (15m)
+                </button>
+              </div>
+
+              <!-- Animated SVG Circular Countdown Ring -->
+              <div class="timer-dial-wrapper">
+                <svg class="timer-dial-svg" viewBox="0 0 320 320">
+                  <defs>
+                    <linearGradient id="timerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="var(--accent-primary)" />
+                      <stop offset="100%" stop-color="var(--accent-secondary)" />
+                    </linearGradient>
+                    <filter id="timerGlow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feGaussianBlur stdDeviation="6" result="blur" />
+                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                  </defs>
+                  <!-- Background Track -->
+                  <circle class="dial-track" cx="160" cy="160" r="140"></circle>
+                  <!-- Animated Progress Stroke -->
+                  <circle class="dial-progress" id="timer-dial-progress" cx="160" cy="160" r="140" stroke="url(#timerGradient)" filter="url(#timerGlow)" stroke-dasharray="879.64" stroke-dashoffset="0"></circle>
+                </svg>
+
+                <div class="timer-display-overlay">
+                  <span class="timer-mode-pill" id="timer-mode-badge">FOCUS SESSION</span>
+                  <div class="timer-digits-box">
+                    <span class="timer-digit" id="timer-minutes">25</span>
+                    <span class="timer-colon">:</span>
+                    <span class="timer-digit" id="timer-seconds">00</span>
+                  </div>
+                  <span class="timer-target-task" id="timer-current-task">Target: Autonomous Directive</span>
+                </div>
+              </div>
+
+              <!-- Interactive Controls -->
+              <div class="timer-controls-row">
+                <button class="timer-btn timer-btn-reset" id="timer-reset-btn" title="Reset Timer">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                  Reset
+                </button>
+                <button class="timer-btn timer-btn-play" id="timer-play-btn" title="Start Focus">
+                  <svg id="timer-play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                  <svg id="timer-pause-icon" class="hidden" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                  <span id="timer-play-label">Start Focus</span>
+                </button>
+                <button class="timer-btn timer-btn-skip" id="timer-skip-btn" title="Skip Session">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19"></line></svg>
+                  Skip
+                </button>
+              </div>
+
+              <!-- Cycle Counter Pods -->
+              <div class="session-cycle-counter">
+                <span class="cycle-title">TODAY'S COMPLETED CYCLES:</span>
+                <div class="cycle-pods" id="focus-cycle-pods">
+                  <div class="cycle-pod"></div>
+                  <div class="cycle-pod"></div>
+                  <div class="cycle-pod"></div>
+                  <div class="cycle-pod"></div>
+                </div>
+                <span class="cycle-count-text" id="focus-completed-count">0 Sessions</span>
+              </div>
+            </div>
+
+            <!-- Focus Sound & Task Alignment Sidebar -->
+            <div class="focus-side-panel">
+              <!-- Ambient Cyber Audio Generator -->
+              <div class="glass-card">
+                <div class="card-header-row">
+                  <div class="card-title-group">
+                    <span class="card-dot-indicator cyan"></span>
+                    <h3 class="card-title">Neural Ambient Synth</h3>
+                  </div>
+                  <button class="btn btn-xs btn-outline" id="synth-toggle-btn">Enable Sound</button>
+                </div>
+                <div class="card-body">
+                  <p class="ambient-desc">Binaural synthesized white noise and cosmic harmonics to enhance cognitive bandwidth.</p>
+                  <div class="synth-preset-buttons">
+                    <button class="synth-preset-btn active" data-preset="space">Cosmic Drone</button>
+                    <button class="synth-preset-btn" data-preset="white">Deep Noise</button>
+                    <button class="synth-preset-btn" data-preset="rain">Binaural Rain</button>
+                  </div>
+                  <div class="volume-slider-row">
+                    <span>Volume</span>
+                    <input type="range" id="synth-volume" min="0" max="1" step="0.05" value="0.3" aria-label="Audio Volume">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Attach Active Task to Focus Session -->
+              <div class="glass-card">
+                <div class="card-header-row">
+                  <div class="card-title-group">
+                    <span class="card-dot-indicator purple"></span>
+                    <h3 class="card-title">Focus Objective Target</h3>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <label for="focus-task-select" class="form-label">Link Pending Task:</label>
+                  <select id="focus-task-select" class="cyber-select full-width">
+                    <option value="">-- No specific task linked --</option>
+                  </select>
+                  <div class="focus-tips-box">
+                    <div class="tip-title">OPERATIONAL TIP:</div>
+                    <div class="tip-body">During focus intervals, eliminate peripheral distractions. ORBIT keeps your telemetry locked.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SECTION 6: CALENDAR
+             ============================================== -->
+        <section class="app-section" id="section-calendar">
+          <div class="section-header-banner">
+            <div class="section-header-info">
+              <h2 class="section-title">CHRONOS ORBITAL CALENDAR</h2>
+              <p class="section-subtitle">Coordinate milestones, tactical deadlines, and orbital events.</p>
+            </div>
+            <div class="section-header-actions">
+              <button class="btn btn-primary" id="open-event-modal-btn">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Schedule Event
+              </button>
+            </div>
+          </div>
+
+          <div class="calendar-layout-grid">
+            <!-- Calendar Main Interactive Grid -->
+            <div class="glass-card calendar-main-card">
+              <!-- Calendar Navigation Header -->
+              <div class="calendar-nav-bar">
+                <div class="cal-nav-left">
+                  <h3 class="cal-month-title" id="cal-current-month-display">November 2026</h3>
+                  <button class="btn btn-xs btn-outline" id="cal-today-btn">Jump to Today</button>
+                </div>
+                <div class="cal-nav-controls">
+                  <button class="action-icon-btn" id="cal-prev-month-btn" title="Previous Month" aria-label="Previous Month">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  </button>
+                  <button class="action-icon-btn" id="cal-next-month-btn" title="Next Month" aria-label="Next Month">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Day of Week Headers -->
+              <div class="cal-weekdays-row">
+                <div class="cal-weekday">SUN</div>
+                <div class="cal-weekday">MON</div>
+                <div class="cal-weekday">TUE</div>
+                <div class="cal-weekday">WED</div>
+                <div class="cal-weekday">THU</div>
+                <div class="cal-weekday">FRI</div>
+                <div class="cal-weekday">SAT</div>
+              </div>
+
+              <!-- 35/42 Calendar Date Cells Grid -->
+              <div class="cal-cells-grid" id="cal-cells-container">
+                <!-- Dynamically generated via JavaScript -->
+              </div>
+            </div>
+
+            <!-- Calendar Side Event Schedule Drawer -->
+            <div class="calendar-side-panel">
+              <div class="glass-card">
+                <div class="card-header-row">
+                  <div class="card-title-group">
+                    <span class="card-dot-indicator cyan"></span>
+                    <h3 class="card-title" id="cal-selected-date-title">Events for Today</h3>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="cal-day-events-list" id="cal-day-events-list">
+                    <!-- Events list for selected date -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="glass-card">
+                <div class="card-header-row">
+                  <div class="card-title-group">
+                    <span class="card-dot-indicator purple"></span>
+                    <h3 class="card-title">Upcoming Agenda</h3>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="cal-upcoming-agenda-list" id="cal-upcoming-agenda-list">
+                    <!-- Upcoming 5 events -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SECTION 7: SCIENTIFIC CALCULATOR
+             ============================================== -->
+        <section class="app-section" id="section-calculator">
+          <div class="section-header-banner">
+            <div class="section-header-info">
+              <h2 class="section-title">QUANTUM SCIENTIFIC CALCULATOR</h2>
+              <p class="section-subtitle">Precision arithmetic and trigonometric computation engine with safe tokenized evaluation.</p>
+            </div>
+          </div>
+
+          <div class="calculator-layout-wrapper">
+            <!-- Main Calculator Glass Unit -->
+            <div class="glass-card calculator-chassis">
+              <!-- Futuristic LED Display Screen -->
+              <div class="calc-screen">
+                <div class="calc-status-strip">
+                  <span class="calc-mode-indicator">DEG</span>
+                  <span class="calc-memory-indicator">PRECISION 64-BIT</span>
+                </div>
+                <div class="calc-expression-row" id="calc-expression-display">0</div>
+                <div class="calc-result-row" id="calc-result-display">0</div>
+              </div>
+
+              <!-- Scientific Keypad Matrix -->
+              <div class="calc-keypad-grid">
+                <!-- Row 1: Sci Functions -->
+                <button class="calc-btn sci-btn" data-calc="sin">sin</button>
+                <button class="calc-btn sci-btn" data-calc="cos">cos</button>
+                <button class="calc-btn sci-btn" data-calc="tan">tan</button>
+                <button class="calc-btn sci-btn" data-calc="pi">&pi;</button>
+                <button class="calc-btn sci-btn" data-calc="e">e</button>
+
+                <!-- Row 2: Sci Powers & Roots -->
+                <button class="calc-btn sci-btn" data-calc="sqrt">&radic;</button>
+                <button class="calc-btn sci-btn" data-calc="pow">^</button>
+                <button class="calc-btn sci-btn" data-calc="log">log</button>
+                <button class="calc-btn sci-btn" data-calc="ln">ln</button>
+                <button class="calc-btn sci-btn" data-calc="%">%</button>
+
+                <!-- Row 3: Controls & Parentheses -->
+                <button class="calc-btn ctrl-btn danger" data-calc="clear">AC</button>
+                <button class="calc-btn ctrl-btn" data-calc="delete">DEL</button>
+                <button class="calc-btn sci-btn" data-calc="(">(</button>
+                <button class="calc-btn sci-btn" data-calc=")">)</button>
+                <button class="calc-btn op-btn" data-calc="/">&divide;</button>
+
+                <!-- Row 4: Numbers 7-9 & Mult -->
+                <button class="calc-btn num-btn" data-calc="7">7</button>
+                <button class="calc-btn num-btn" data-calc="8">8</button>
+                <button class="calc-btn num-btn" data-calc="9">9</button>
+                <button class="calc-btn sci-btn" data-calc="pm">&plusmn;</button>
+                <button class="calc-btn op-btn" data-calc="*">&times;</button>
+
+                <!-- Row 5: Numbers 4-6 & Sub -->
+                <button class="calc-btn num-btn" data-calc="4">4</button>
+                <button class="calc-btn num-btn" data-calc="5">5</button>
+                <button class="calc-btn num-btn" data-calc="6">6</button>
+                <button class="calc-btn sci-btn" data-calc="sq">x&sup2;</button>
+                <button class="calc-btn op-btn" data-calc="-">&minus;</button>
+
+                <!-- Row 6: Numbers 1-3 & Add -->
+                <button class="calc-btn num-btn" data-calc="1">1</button>
+                <button class="calc-btn num-btn" data-calc="2">2</button>
+                <button class="calc-btn num-btn" data-calc="3">3</button>
+                <button class="calc-btn sci-btn" data-calc="inv">1/x</button>
+                <button class="calc-btn op-btn" data-calc="+">&plus;</button>
+
+                <!-- Row 7: 0, Dec, Ans, Equals -->
+                <button class="calc-btn num-btn zero-btn" data-calc="0">0</button>
+                <button class="calc-btn num-btn" data-calc=".">.</button>
+                <button class="calc-btn sci-btn" data-calc="ans">ANS</button>
+                <button class="calc-btn equals-btn" data-calc="=">&equals;</button>
+              </div>
+            </div>
+
+            <!-- Calculation History Reel Side-Card -->
+            <div class="glass-card calc-history-panel">
+              <div class="card-header-row">
+                <div class="card-title-group">
+                  <span class="card-dot-indicator cyan"></span>
+                  <h3 class="card-title">Computation Log</h3>
+                </div>
+                <button class="btn btn-xs btn-outline-danger" id="clear-calc-history-btn">Clear Log</button>
+              </div>
+              <div class="card-body">
+                <div class="calc-history-list" id="calc-history-container">
+                  <div class="empty-state-card">
+                    <p>No computations recorded yet.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==============================================
+             SECTION 8: SETTINGS
+             ============================================== -->
+        <section class="app-section" id="section-settings">
+          <div class="section-header-banner">
+            <div class="section-header-info">
+              <h2 class="section-title">SYSTEM CONFIGURATION & PREFERENCES</h2>
+              <p class="section-subtitle">Customize visual themes, audio haptics, identity, and local storage data.</p>
+            </div>
+          </div>
+
+          <div class="settings-grid">
+            <!-- Appearance & Visuals -->
+            <div class="glass-card">
+              <div class="card-header-row">
+                <div class="card-title-group">
+                  <span class="card-dot-indicator cyan"></span>
+                  <h3 class="card-title">Aesthetic & Interface Theme</h3>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-label">Theme Mode</span>
+                    <span class="setting-desc">Switch between obsidian dark and clean high-tech light.</span>
+                  </div>
+                  <div class="theme-switch-group">
+                    <button class="theme-btn active" data-theme-val="dark" id="theme-dark-btn">Dark Cyber</button>
+                    <button class="theme-btn" data-theme-val="light" id="theme-light-btn">Light Tech</button>
+                  </div>
+                </div>
+
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-label">Accent Luminescence</span>
+                    <span class="setting-desc">Select the primary quantum color of the user interface.</span>
+                  </div>
+                  <div class="accent-color-picker" id="accent-color-picker">
+                    <button class="accent-dot cyan active" data-accent-color="cyan" title="Neon Cyan"></button>
+                    <button class="accent-dot blue" data-accent-color="blue" title="Electric Blue"></button>
+                    <button class="accent-dot purple" data-accent-color="purple" title="Cyber Purple"></button>
+                    <button class="accent-dot green" data-accent-color="green" title="Emerald Matrix"></button>
+                    <button class="accent-dot amber" data-accent-color="amber" title="Solar Amber"></button>
+                  </div>
+                </div>
+
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-label">Background Particle Animation</span>
+                    <span class="setting-desc">Toggle the interactive canvas particle network.</span>
+                  </div>
+                  <label class="cyber-switch">
+                    <input type="checkbox" id="setting-particles-toggle" checked>
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Identity & Localization -->
+            <div class="glass-card">
+              <div class="card-header-row">
+                <div class="card-title-group">
+                  <span class="card-dot-indicator purple"></span>
+                  <h3 class="card-title">Commander Identity</h3>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="setting-user-name" class="form-label">Commander Name</label>
+                  <input type="text" id="setting-user-name" class="cyber-input" value="Subhranil" placeholder="Enter name...">
+                </div>
+
+                <div class="form-group">
+                  <label for="setting-user-title" class="form-label">Military / Operational Rank</label>
+                  <input type="text" id="setting-user-title" class="cyber-input" value="COMMANDER" placeholder="e.g. COMMANDER, ARCHITECT, PILOT">
+                </div>
+
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-label">Clock Telemetry Format</span>
+                    <span class="setting-desc">Switch between 12-hour AM/PM and 24-hour military time.</span>
+                  </div>
+                  <div class="theme-switch-group">
+                    <button class="theme-btn active" data-clock-format="12" id="clock-format-12">12-Hour</button>
+                    <button class="theme-btn" data-clock-format="24" id="clock-format-24">24-Hour</button>
+                  </div>
+                </div>
+
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <span class="setting-label">Futuristic Audio Haptics</span>
+                    <span class="setting-desc">Play synthesized sound effects during interactions.</span>
+                  </div>
+                  <label class="cyber-switch">
+                    <input type="checkbox" id="setting-sound-toggle" checked>
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <button class="btn btn-primary" id="save-settings-profile-btn">Update Profile</button>
+              </div>
+            </div>
+
+            <!-- Data Management & Backup -->
+            <div class="glass-card full-width-card">
+              <div class="card-header-row">
+                <div class="card-title-group">
+                  <span class="card-dot-indicator amber"></span>
+                  <h3 class="card-title">Local Storage Data Vault & Diagnostics</h3>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="storage-stats-row">
+                  <div class="storage-metric">
+                    <span class="storage-label">STORAGE ENGINE:</span>
+                    <span class="storage-val">Browser LocalStorage</span>
+                  </div>
+                  <div class="storage-metric">
+                    <span class="storage-label">DATABASE ENCRYPTION:</span>
+                    <span class="storage-val text-green">CLIENT-SIDE AES ISOLATED</span>
+                  </div>
+                  <div class="storage-metric">
+                    <span class="storage-label">PERSISTENT OBJECTS:</span>
+                    <span class="storage-val" id="storage-objects-count">--</span>
+                  </div>
+                </div>
+
+                <div class="data-actions-row">
+                  <button class="btn btn-secondary" id="export-data-btn">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Export System Backup (.JSON)
+                  </button>
+
+                  <label class="btn btn-secondary file-upload-btn">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    Import Backup File
+                    <input type="file" id="import-data-file" accept=".json" class="hidden">
+                  </label>
+
+                  <button class="btn btn-accent" id="load-sample-data-btn">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                    Reload Sample Mission Data
+                  </button>
+
+                  <button class="btn btn-danger" id="clear-all-data-btn">
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    Purge All System Data
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- MINIMAL FUTURISTIC FOOTER -->
+      <footer class="app-footer">
+        <div class="footer-left">
+          <div class="footer-brand-pill">
+            <svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <ellipse cx="12" cy="12" rx="11" ry="4" transform="rotate(-30 12 12)"/>
+            </svg>
+            <span>ORBIT // COMMAND CENTER</span>
+          </div>
+          <span class="footer-uptime" id="system-uptime-text">UPTIME: 00:00:00</span>
+        </div>
+
+        <div class="footer-center">
+          <span class="footer-credits">Designed & Developed by Subhranil Paul</span>
+        </div>
+
+        <div class="footer-right">
+          <span class="footer-latency">LATENCY: 0ms (LOCAL)</span>
+          <span class="status-pulse-dot green"></span>
+          <span class="footer-status-label">SYS OK</span>
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- ==============================================
+       MODALS & FLOATING OVERLAYS
+       ============================================== -->
+
+  <!-- 1. COMMAND PALETTE (CTRL + K) -->
+  <div class="modal-backdrop hidden" id="cmd-palette-modal">
+    <div class="cmd-palette-box">
+      <div class="cmd-palette-header">
+        <svg class="cmd-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="cmd-palette-input" placeholder="Type a command or jump to section..." autocomplete="off">
+        <span class="cmd-esc-badge">ESC to close</span>
+      </div>
+      <div class="cmd-results-list" id="cmd-results-list">
+        <!-- Results rendered via JavaScript -->
+      </div>
+      <div class="cmd-palette-footer">
+        <span>Use <kbd>&uarr;</kbd> <kbd>&darr;</kbd> to navigate</span>
+        <span><kbd>Enter</kbd> to execute</span>
+        <span><kbd>Esc</kbd> to exit</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. TASK CREATE/EDIT MODAL -->
+  <div class="modal-backdrop hidden" id="task-modal">
+    <div class="cyber-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="task-modal-title">New Directive</h3>
+        <button class="modal-close-btn" id="task-modal-close">&times;</button>
+      </div>
+      <form id="task-form" class="modal-form">
+        <input type="hidden" id="task-id-input">
+        
+        <div class="form-group">
+          <label for="task-title-input" class="form-label">Task Title *</label>
+          <input type="text" id="task-title-input" class="cyber-input" placeholder="e.g. Calibrate orbital sensors" required>
+        </div>
+
+        <div class="form-group">
+          <label for="task-desc-input" class="form-label">Description / Subnotes</label>
+          <textarea id="task-desc-input" class="cyber-textarea" rows="3" placeholder="Provide operational context or steps..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-half">
+            <label for="task-priority-select" class="form-label">Priority Level *</label>
+            <select id="task-priority-select" class="cyber-select" required>
+              <option value="high">High Priority (Red Alert)</option>
+              <option value="medium" selected>Medium Priority (Normal)</option>
+              <option value="low">Low Priority (Advisory)</option>
+            </select>
+          </div>
+
+          <div class="form-group col-half">
+            <label for="task-category-select" class="form-label">Category</label>
+            <select id="task-category-select" class="cyber-select">
+              <option value="Work">Work</option>
+              <option value="Personal">Personal</option>
+              <option value="Mission">Mission</option>
+              <option value="Research">Research</option>
+              <option value="Finance">Finance</option>
+              <option value="Health">Health</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="task-due-date-input" class="form-label">Due Date *</label>
+          <input type="date" id="task-due-date-input" class="cyber-input" required>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="task-modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="task-modal-save">Commit Directive</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. NOTE CREATE/EDIT MODAL -->
+  <div class="modal-backdrop hidden" id="note-modal">
+    <div class="cyber-modal-card note-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="note-modal-title">Create Neural Note</h3>
+        <button class="modal-close-btn" id="note-modal-close">&times;</button>
+      </div>
+      <form id="note-form" class="modal-form">
+        <input type="hidden" id="note-id-input">
+        
+        <div class="form-group">
+          <label for="note-title-input" class="form-label">Note Title *</label>
+          <input type="text" id="note-title-input" class="cyber-input" placeholder="e.g. Quantum Navigation Parameters" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-half">
+            <label for="note-category-input" class="form-label">Category / Classification</label>
+            <select id="note-category-input" class="cyber-select">
+              <option value="General">General</option>
+              <option value="Work">Work</option>
+              <option value="Ideas">Ideas</option>
+              <option value="Research">Research</option>
+              <option value="Tactical">Tactical</option>
+            </select>
+          </div>
+
+          <div class="form-group col-half">
+            <label class="form-label">Color Accent Glow</label>
+            <div class="note-color-picker" id="note-color-picker">
+              <button type="button" class="color-dot cyan active" data-color="cyan"></button>
+              <button type="button" class="color-dot purple" data-color="purple"></button>
+              <button type="button" class="color-dot green" data-color="green"></button>
+              <button type="button" class="color-dot amber" data-color="amber"></button>
+              <button type="button" class="color-dot blue" data-color="blue"></button>
+            </div>
+            <input type="hidden" id="note-color-val" value="cyan">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="note-content-input" class="form-label">Content / Body *</label>
+          <textarea id="note-content-input" class="cyber-textarea note-textarea" rows="8" placeholder="Type your neural notes, markdown, ideas or logs..." required></textarea>
+        </div>
+
+        <div class="note-meta-preview">
+          <span id="note-word-count">0 words</span>
+          <span id="note-char-count">0 characters</span>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="note-modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="note-modal-save">Save Note</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. EXPENSE CREATE/EDIT MODAL -->
+  <div class="modal-backdrop hidden" id="expense-modal">
+    <div class="cyber-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="expense-modal-title">Log Financial Transaction</h3>
+        <button class="modal-close-btn" id="expense-modal-close">&times;</button>
+      </div>
+      <form id="expense-form" class="modal-form">
+        <input type="hidden" id="expense-id-input">
+
+        <div class="form-row">
+          <div class="form-group col-half">
+            <label class="form-label">Transaction Type *</label>
+            <div class="type-toggle-group">
+              <button type="button" class="type-btn" data-type="income" id="type-btn-income">+ Inflow (Income)</button>
+              <button type="button" class="type-btn active" data-type="expense" id="type-btn-expense">- Outflow (Expense)</button>
+            </div>
+            <input type="hidden" id="expense-type-val" value="expense">
+          </div>
+
+          <div class="form-group col-half">
+            <label for="expense-amount-input" class="form-label">Amount ($) *</label>
+            <input type="number" id="expense-amount-input" class="cyber-input" step="0.01" min="0.01" placeholder="0.00" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="expense-desc-input" class="form-label">Description *</label>
+          <input type="text" id="expense-desc-input" class="cyber-input" placeholder="e.g. Orbital Data Server Subscription" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-half">
+            <label for="expense-category-input" class="form-label">Category *</label>
+            <select id="expense-category-input" class="cyber-select" required>
+              <option value="Food & Dining">Food & Dining</option>
+              <option value="Housing & Utilities">Housing & Utilities</option>
+              <option value="Tech & Hardware">Tech & Hardware</option>
+              <option value="Salary">Salary</option>
+              <option value="Freelance">Freelance</option>
+              <option value="Investments">Investments</option>
+              <option value="Transport">Transport</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Health">Health</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group col-half">
+            <label for="expense-date-input" class="form-label">Date *</label>
+            <input type="date" id="expense-date-input" class="cyber-input" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="expense-modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="expense-modal-save">Commit Ledger Entry</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. CALENDAR EVENT CREATE/EDIT MODAL -->
+  <div class="modal-backdrop hidden" id="event-modal">
+    <div class="cyber-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="event-modal-title">Schedule Mission Event</h3>
+        <button class="modal-close-btn" id="event-modal-close">&times;</button>
+      </div>
+      <form id="event-form" class="modal-form">
+        <input type="hidden" id="event-id-input">
+
+        <div class="form-group">
+          <label for="event-title-input" class="form-label">Event Title *</label>
+          <input type="text" id="event-title-input" class="cyber-input" placeholder="e.g. Orbital Fleet Briefing" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-half">
+            <label for="event-date-input" class="form-label">Event Date *</label>
+            <input type="date" id="event-date-input" class="cyber-input" required>
+          </div>
+
+          <div class="form-group col-half">
+            <label for="event-time-input" class="form-label">Event Time</label>
+            <input type="time" id="event-time-input" class="cyber-input" value="10:00">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-half">
+            <label for="event-category-select" class="form-label">Classification</label>
+            <select id="event-category-select" class="cyber-select">
+              <option value="Mission">Mission</option>
+              <option value="Meeting">Meeting</option>
+              <option value="Personal">Personal</option>
+              <option value="Deadline">Deadline</option>
+              <option value="Review">Review</option>
+            </select>
+          </div>
+
+          <div class="form-group col-half">
+            <label for="event-badge-color" class="form-label">Highlight Accent</label>
+            <select id="event-badge-color" class="cyber-select">
+              <option value="cyan">Neon Cyan</option>
+              <option value="purple">Cyber Purple</option>
+              <option value="green">Emerald</option>
+              <option value="amber">Amber Alert</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="event-desc-input" class="form-label">Briefing Notes</label>
+          <textarea id="event-desc-input" class="cyber-textarea" rows="2" placeholder="Agenda or notes..."></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="event-modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="event-modal-save">Commit Schedule</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 6. KEYBOARD SHORTCUTS MODAL -->
+  <div class="modal-backdrop hidden" id="shortcuts-modal">
+    <div class="cyber-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Cybernetic Keyboard Shortcuts</h3>
+        <button class="modal-close-btn" id="shortcuts-modal-close">&times;</button>
+      </div>
+      <div class="shortcuts-grid">
+        <div class="shortcut-row">
+          <span class="shortcut-desc">Open Command Palette</span>
+          <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>K</kbd></span>
+        </div>
+        <div class="shortcut-row">
+          <span class="shortcut-desc">Toggle Sidebar Collapse</span>
+          <span class="shortcut-keys"><kbd>Ctrl</kbd> + <kbd>B</kbd></span>
+        </div>
+        <div class="shortcut-row">
+          <span class="shortcut-desc">Show Keyboard Shortcuts</span>
+          <span class="shortcut-keys"><kbd>?</kbd></span>
+        </div>
+        <div class="shortcut-row">
+          <span class="shortcut-desc">Jump to Command Center</span>
+          <span class="shortcut-keys"><kbd>1</kbd></span>
+        </div>
+        <div class="shortcut-row">
+          <span class="shortcut-desc">Jump to Task Manager</span>
+          <span class="shortcut-keys"><kbd>2</kbd></span>
+        </div>
+        <div class="shortcut-row">
+          <span class="shortcut-desc">Jump to Notes Vault</span>
+          <span class="shortcut-keys"><kbd>3</kbd></span>
+        </div>
+        <div class="shortcut-row">
+          <span class="shortcut-desc">Jump to Expense Tracker</span>
+          <span class="shortcut-keys"><kbd>4</kbd></span>
+        </div>
+        <div class="shortcut-row">
+          <span class="shortcut-desc">Jump to Focus Mode</span>
+          <span class="shortcut-keys"><kbd>5</kbd></span>
+        </div>
+        <div class="shortcut-row">
+          <span class="shortcut-desc">Jump to Calendar</span>
+          <span class="shortcut-keys"><kbd>6</kbd></span>
+        </div>
+        <div class="shortcut-row">
+          <span class="shortcut-desc">Jump to Calculator</span>
+          <span class="shortcut-keys"><kbd>7</kbd></span>
+        </div>
+        <div class="shortcut-row">
+          <span class="shortcut-desc">Jump to Settings</span>
+          <span class="shortcut-keys"><kbd>8</kbd></span>
+        </div>
+        <div class="shortcut-row">
+          <span class="shortcut-desc">Close Active Modal</span>
+          <span class="shortcut-keys"><kbd>Esc</kbd></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="shortcuts-modal-ok">Acknowledge</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. SECURITY CONFIRMATION PURGE MODAL -->
+  <div class="modal-backdrop hidden" id="purge-modal">
+    <div class="cyber-modal-card danger-card">
+      <div class="modal-header">
+        <h3 class="modal-title text-magenta">CRITICAL SYSTEM WARNING</h3>
+        <button class="modal-close-btn" id="purge-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="purge-warning-text">You are about to initiate a complete wipe of all ORBIT LocalStorage archives (Tasks, Notes, Transactions, and Events).</p>
+        <p class="purge-instruction">To execute this purge protocol, type <strong>PURGE</strong> below:</p>
+        <input type="text" id="purge-confirmation-input" class="cyber-input danger-input" placeholder="Type PURGE to confirm">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="purge-modal-cancel">Abort Protocol</button>
+        <button type="button" class="btn btn-danger" id="purge-confirm-btn" disabled>Execute Data Purge</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- VANILLA JAVASCRIPT LOGIC -->
+  <script src="script.js"></script>
+</body>
+</html>
